@@ -1,39 +1,151 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>RoyalXMods Login</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <style>
-    /* Rainbow animated background */
-    body {
-      margin: 0;
-      height: 100vh;
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-      background: linear-gradient(270deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff);
-      background-size: 1400% 1400%;
-      animation: rainbow 20s ease infinite;
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Neon Login/Signup</title>
+<style>
+/* Body & Background */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    height: 100vh;
+    background: url('https://images.unsplash.com/photo-1582719478141-bbd50b9df479?auto=format&fit=crop&w=800&q=80') no-repeat center center/cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Container */
+.container {
+    background: rgba(0,0,0,0.6);
+    padding: 40px 30px;
+    border-radius: 20px;
+    text-align: center;
+    width: 90%;
+    max-width: 350px;
+    box-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff;
+}
+
+/* Neon Text */
+h2 {
+    color: #ff00ff;
+    text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff;
+    margin-bottom: 20px;
+}
+
+/* Inputs */
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 15px;
+    border: 2px solid #00ffff;
+    background: rgba(0,0,0,0.3);
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    text-align: center;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #ff00ff;
+    box-shadow: 0 0 10px #ff00ff;
+}
+
+/* Button */
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border-radius: 25px;
+    border: none;
+    background: #00ffff;
+    color: #000;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+    text-shadow: 0 0 5px #fff;
+}
+
+button:hover {
+    background: #ff00ff;
+    color: #fff;
+    box-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff;
+}
+
+/* Toggle Link */
+p {
+    margin-top: 15px;
+    color: #fff;
+    cursor: pointer;
+    text-shadow: 0 0 5px #00ffff;
+    font-size: 0.9rem;
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="authContainer">
+    <h2 id="formTitle">Sign Up</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button id="authBtn">Sign Up</button>
+    <p id="toggleForm">Already have an account? Login</p>
+</div>
+
+<script>
+// Elements
+let isLogin = false;
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+const authBtn = document.getElementById('authBtn');
+const toggleForm = document.getElementById('toggleForm');
+const formTitle = document.getElementById('formTitle');
+
+// Toggle login/signup
+toggleForm.addEventListener('click', () => {
+    isLogin = !isLogin;
+    formTitle.innerText = isLogin ? "Login" : "Sign Up";
+    authBtn.innerText = isLogin ? "Login" : "Sign Up";
+    toggleForm.innerText = isLogin ? "Don't have an account? Sign Up" : "Already have an account? Login";
+});
+
+// Auth Button using localStorage
+authBtn.addEventListener('click', () => {
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if(!username || !password) {
+        alert("Enter both username and password.");
+        return;
     }
 
-    @keyframes rainbow {
-      0% { background-position:0% 50%; }
-      50% { background-position:100% 50%; }
-      100% { background-position:0% 50%; }
+    if(isLogin){
+        const storedPass = localStorage.getItem(username);
+        if(storedPass && storedPass === password){
+            localStorage.setItem("currentUser", username);
+            window.location.href = "main.html"; // Redirect to main page
+        } else {
+            alert("Invalid username or password.");
+        }
+    } else {
+        if(localStorage.getItem(username)){
+            alert("Username already exists.");
+        } else {
+            localStorage.setItem(username, password);
+            localStorage.setItem("currentUser", username);
+            window.location.href = "main.html"; // Redirect to main page
+        }
     }
+});
+</script>
 
-    /* Neon login box */
-    .box {
-      background: rgba(0,0,0,0.75);
-      padding: 30px;
-      border-radius: 20px;
-      box-shadow: 0 0 30px #00ffff, 0 0 60px #ff00ff;
-      width: 90%;
-      max-width: 360px;
-      text-align: center;
-    }
+</body>
+</html>
 
     h2 {
       color: #00ffff;
@@ -159,3 +271,4 @@
 
 </body>
 </html>
+
