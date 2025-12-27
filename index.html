@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Neon Login/Signup</title>
+<title>Neon Login with Google</title>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <style>
-/* Body & Background */
 body {
     margin: 0;
     padding: 0;
@@ -17,7 +17,6 @@ body {
     align-items: center;
 }
 
-/* Container */
 .container {
     background: rgba(0,0,0,0.6);
     padding: 40px 30px;
@@ -28,12 +27,148 @@ body {
     box-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff;
 }
 
-/* Neon Text */
 h2 {
     color: #ff00ff;
     text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff;
     margin-bottom: 20px;
 }
+
+input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 15px;
+    border: 2px solid #00ffff;
+    background: rgba(0,0,0,0.3);
+    color: #fff;
+    font-size: 1rem;
+    outline: none;
+    text-align: center;
+    transition: 0.3s;
+}
+
+input:focus {
+    border-color: #ff00ff;
+    box-shadow: 0 0 10px #ff00ff;
+}
+
+button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 15px;
+    border-radius: 25px;
+    border: none;
+    background: #00ffff;
+    color: #000;
+    font-weight: bold;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: 0.3s;
+    text-shadow: 0 0 5px #fff;
+}
+
+button:hover {
+    background: #ff00ff;
+    color: #fff;
+    box-shadow: 0 0 20px #ff00ff, 0 0 40px #00ffff;
+}
+
+p {
+    margin-top: 15px;
+    color: #fff;
+    cursor: pointer;
+    text-shadow: 0 0 5px #00ffff;
+    font-size: 0.9rem;
+}
+
+#googleButton {
+    margin-top: 20px;
+}
+</style>
+</head>
+<body>
+
+<div class="container" id="authContainer">
+    <h2 id="formTitle">Sign Up</h2>
+    <input type="text" id="username" placeholder="Username">
+    <input type="password" id="password" placeholder="Password">
+    <button id="authBtn">Sign Up</button>
+    <p id="toggleForm">Already have an account? Login</p>
+
+    <div id="googleButton"></div>
+</div>
+
+<script>
+// --- Local Storage Login/Signup ---
+let isLogin = false;
+const usernameInput = document.getElementById('username');
+const passwordInput = document.getElementById('password');
+const authBtn = document.getElementById('authBtn');
+const toggleForm = document.getElementById('toggleForm');
+const formTitle = document.getElementById('formTitle');
+
+toggleForm.addEventListener('click', () => {
+    isLogin = !isLogin;
+    formTitle.innerText = isLogin ? "Login" : "Sign Up";
+    authBtn.innerText = isLogin ? "Login" : "Sign Up";
+    toggleForm.innerText = isLogin ? "Don't have an account? Sign Up" : "Already have an account? Login";
+});
+
+authBtn.addEventListener('click', () => {
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+
+    if(!username || !password){
+        alert("Enter both username and password.");
+        return;
+    }
+
+    if(isLogin){
+        const storedPass = localStorage.getItem(username);
+        if(storedPass && storedPass === password){
+            localStorage.setItem("currentUser", username);
+            window.location.href = "main.html";
+        } else {
+            alert("Invalid username or password.");
+        }
+    } else {
+        if(localStorage.getItem(username)){
+            alert("Username already exists.");
+        } else {
+            localStorage.setItem(username, password);
+            localStorage.setItem("currentUser", username);
+            window.location.href = "main.html";
+        }
+    }
+});
+
+// --- Google Sign-In ---
+function handleCredentialResponse(response) {
+    const profile = jwt_decode(response.credential); // use jwt_decode library
+    const googleUser = profile.email;
+    localStorage.setItem("currentUser", googleUser);
+    alert("Logged in as " + googleUser);
+    window.location.href = "main.html";
+}
+
+// Render Google button
+window.onload = function(){
+    google.accounts.id.initialize({
+        client_id: 'YOUR_GOOGLE_CLIENT_ID', // Replace with your client ID
+        callback: handleCredentialResponse
+    });
+    google.accounts.id.renderButton(
+        document.getElementById('googleButton'),
+        { theme: 'outline', size: 'large', text: 'signin_with' }
+    );
+};
+</script>
+
+<!-- JWT Decode Library for decoding Google ID token -->
+<script src="https://cdn.jsdelivr.net/npm/jwt-decode/build/jwt-decode.min.js"></script>
+
+</body>
+</html>
 
 /* Inputs */
 input {
@@ -271,4 +406,5 @@ authBtn.addEventListener('click', () => {
 
 </body>
 </html>
+
 
