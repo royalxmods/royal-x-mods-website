@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RoyalXMods Login</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    /* Rainbow animated background */
+    body {
+      margin: 0;
+      height: 100vh;
+      font-family: Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+      background: linear-gradient(270deg, #ff0000, #ff7f00, #ffff00, #00ff00, #0000ff, #4b0082, #8b00ff);
+      background-size: 1400% 1400%;
+      animation: rainbow 20s ease infinite;
+    }
+
+    @keyframes rainbow {
+      0% { background-position:0% 50%; }
+      50% { background-position:100% 50%; }
+      100% { background-position:0% 50%; }
+    }
+
+    /* Neon login box */
+    .box {
+      background: rgba(0,0,0,0.75);
+      padding: 30px;
+      border-radius: 20px;
+      box-shadow: 0 0 30px #00ffff, 0 0 60px #ff00ff;
+      width: 90%;
+      max-width: 360px;
+      text-align: center;
+    }
+
+    h2 {
+      color: #00ffff;
+      text-shadow: 0 0 10px #00ffff, 0 0 20px #ff00ff;
+      margin-bottom: 20px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px;
+      margin: 10px 0;
+      border-radius: 10px;
+      border: 1px solid #00ffff;
+      background: rgba(0,0,0,0.5);
+      color: white;
+      outline: none;
+      box-shadow: 0 0 10px #00ffff55, 0 0 20px #ff00ff33 inset;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 15px;
+      border: none;
+      border-radius: 12px;
+      background: #00ffff;
+      color: black;
+      font-size: 16px;
+      font-weight: bold;
+      box-shadow: 0 0 15px #00ffff, 0 0 25px #ff00ff;
+      cursor: pointer;
+    }
+
+    .switch {
+      margin-top: 15px;
+      color: #aaa;
+    }
+
+    .switch span {
+      color: #ff00ff;
+      cursor: pointer;
+      text-shadow: 0 0 10px #ff00ff;
+    }
+
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+
+<div class="box">
+
+  <!-- LOGIN -->
+  <div id="loginBox">
+    <h2>Sign In</h2>
+    <input id="loginUser" placeholder="Username">
+    <input id="loginPass" type="password" placeholder="Password">
+    <button onclick="login()">Login</button>
+    <div class="switch">
+      No account? <span onclick="showSignup()">Sign up</span>
+    </div>
+  </div>
+
+  <!-- SIGNUP -->
+  <div id="signupBox" class="hidden">
+    <h2>Sign Up</h2>
+    <input id="signupUser" placeholder="Username">
+    <input id="signupPass" type="password" placeholder="Password">
+    <button onclick="signup()">Create Account</button>
+    <div class="switch">
+      Have account? <span onclick="showLogin()">Sign in</span>
+    </div>
+  </div>
+
+  <!-- SUCCESS -->
+  <div id="successBox" class="hidden">
+    <h2>Welcome!</h2>
+    <p id="welcomeUser"></p>
+  </div>
+
+</div>
+
+<script>
+  function showSignup() {
+    loginBox.classList.add('hidden');
+    signupBox.classList.remove('hidden');
+  }
+
+  function showLogin() {
+    signupBox.classList.add('hidden');
+    loginBox.classList.remove('hidden');
+  }
+
+  function signup() {
+    let user = signupUser.value.trim();
+    let pass = signupPass.value.trim();
+    if(!user || !pass){ alert('Fill all fields'); return; }
+    localStorage.setItem('user', user);
+    localStorage.setItem('pass', pass);
+    alert('Account created!');
+    showLogin();
+  }
+
+  function login() {
+    let user = loginUser.value;
+    let pass = loginPass.value;
+    if(user === localStorage.getItem('user') && pass === localStorage.getItem('pass')){
+      showSuccess(user);
+    } else {
+      alert('Wrong credentials!');
+    }
+  }
+
+  function showSuccess(user){
+    loginBox.classList.add('hidden');
+    signupBox.classList.add('hidden');
+    successBox.classList.remove('hidden');
+    welcomeUser.innerText = 'Hello, ' + user;
+  }
+
+  // Auto-login if already saved
+  if(localStorage.getItem('user')) showSuccess(localStorage.getItem('user'));
+</script>
+
+</body>
+</html>
