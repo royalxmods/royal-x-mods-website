@@ -1,39 +1,118 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Neon Login with Google</title>
-<script src="https://accounts.google.com/gsi/client" async defer></script>
-<style>
-body {
-    margin: 0;
-    padding: 0;
-    font-family: 'Arial', sans-serif;
-    height: 100vh;
-    background: url('https://images.unsplash.com/photo-1582719478141-bbd50b9df479?auto=format&fit=crop&w=800&q=80') no-repeat center center/cover;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sign In / Sign Up</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to right, #6a11cb, #2575fc);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
 
-.container {
-    background: rgba(0,0,0,0.6);
-    padding: 40px 30px;
-    border-radius: 20px;
-    text-align: center;
-    width: 90%;
-    max-width: 350px;
-    box-shadow: 0 0 30px #ff00ff, 0 0 60px #00ffff;
-}
+    .container {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+      width: 300px;
+      text-align: center;
+      color: #fff;
+    }
 
-h2 {
-    color: #ff00ff;
-    text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff;
-    margin-bottom: 20px;
-}
+    h2 {
+      margin-bottom: 20px;
+    }
 
-input {
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 8px;
+      border: none;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      border: none;
+      border-radius: 8px;
+      background: #fff;
+      color: #2575fc;
+      font-weight: bold;
+      cursor: pointer;
+      margin-top: 10px;
+    }
+
+    .toggle-btn {
+      margin-top: 15px;
+      background: transparent;
+      color: #fff;
+      text-decoration: underline;
+      cursor: pointer;
+      border: none;
+      font-size: 0.9em;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2 id="form-title">Sign In</h2>
+    <form id="auth-form">
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <div id="signup-fields" style="display:none;">
+        <input type="text" id="username" placeholder="Username" required>
+      </div>
+      <button type="submit" id="submit-btn">Sign In</button>
+    </form>
+    <button class="toggle-btn" id="toggle-btn">Don't have an account? Sign Up</button>
+  </div>
+
+  <script>
+    const toggleBtn = document.getElementById('toggle-btn');
+    const signupFields = document.getElementById('signup-fields');
+    const formTitle = document.getElementById('form-title');
+    const submitBtn = document.getElementById('submit-btn');
+
+    let isSignIn = true;
+
+    toggleBtn.addEventListener('click', () => {
+      isSignIn = !isSignIn;
+      if (isSignIn) {
+        signupFields.style.display = 'none';
+        formTitle.textContent = 'Sign In';
+        submitBtn.textContent = 'Sign In';
+        toggleBtn.textContent = "Don't have an account? Sign Up";
+      } else {
+        signupFields.style.display = 'block';
+        formTitle.textContent = 'Sign Up';
+        submitBtn.textContent = 'Sign Up';
+        toggleBtn.textContent = "Already have an account? Sign In";
+      }
+    });
+
+    document.getElementById('auth-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const username = document.getElementById('username').value;
+
+      if (isSignIn) {
+        alert(`Signing in with:\nEmail: ${email}\nPassword: ${password}`);
+      } else {
+        alert(`Signing up with:\nUsername: ${username}\nEmail: ${email}\nPassword: ${password}`);
+      }
+    });
+  </script>
+</body>
+</html>
     width: 100%;
     padding: 12px;
     margin: 10px 0;
@@ -406,5 +485,6 @@ authBtn.addEventListener('click', () => {
 
 </body>
 </html>
+
 
 
